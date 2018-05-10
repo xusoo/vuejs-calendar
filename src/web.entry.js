@@ -1,8 +1,4 @@
-import Vue from 'vue'
+import './style.scss';
+import VueCalendar from './entry';
 
-new Vue({
-  el: '#app',
-  data: {
-    msg: 'Hello World'
-  }
-});
+VueCalendar(window.__INITIAL_STATE__).$mount('#app');
