@@ -1,14 +1,17 @@
 <template>
-	<div id="event-form" :class="{ active }" :style="{ left, top }">
-		<h4>Add event</h4>
-		<p>{{ day.format('dddd, MMM Do') }}</p>
-		<div class="text">
-			<input v-focus placeholder="e.g. Important meeting" type="text" v-model="description" @keypress.enter="createEvent">
+	<div>
+		<div id="event-form-mask" @click="close" v-show="active"></div>
+		<div id="event-form" :class="{ active }" :style="{ left, top }">
+			<h4>Add event</h4>
+			<p>{{ day.format('dddd, MMM Do') }}</p>
+			<div class="text">
+				<input v-focus placeholder="e.g. Important meeting" type="text" v-model="description" @keypress.enter="createEvent" @keypress.esc="close">
+			</div>
+			<div class="buttons">
+				<button @click="createEvent">Create</button>
+			</div>
+			<div id="close-button" @click="close">&times;</div>
 		</div>
-		<div class="buttons">
-			<button @click="createEvent">Create</button>
-		</div>
-		<div id="close-button" @click="close">&times;</div>
 	</div>
 </template>
 

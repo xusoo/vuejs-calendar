@@ -44,7 +44,6 @@ body {
   display: flex;
   justify-content: center;
 
-
   // Test
   background-color: $gallery;
 
@@ -156,7 +155,6 @@ body {
 
         .day {
 
-
         }
         &:last-child {
           .day {
@@ -187,7 +185,6 @@ body {
       flex-direction: column;
       align-content: space-between;
 
-
       h4 {
         margin: 0 0 0.75rem 0;
         color: $dusty-gray;
@@ -199,7 +196,6 @@ body {
         font-size: 0.85rem;
         margin: 0 0 0.85rem 0;
       }
-
 
       & > * {
         width: 100%
@@ -222,7 +218,7 @@ body {
           font-weight: bold;
           border-radius: 2px;
           color: white;
-          &:focus  {
+          &:focus {
             outline: none;
           }
           &:hover {
@@ -244,10 +240,21 @@ body {
         right: 0.6rem;
         top: 0.6rem;
         cursor: pointer;
-        &:focus  {
+        &:focus {
           outline: none;
         }
       }
+    }
+
+    #event-form-mask {
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      background: white;
+      opacity: 0.5;
+      left: 0;
+      top: 0;
+      transition: opacity .3s ease;
     }
 
   }
