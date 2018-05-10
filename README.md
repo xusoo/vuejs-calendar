@@ -17,3 +17,6 @@ npm run start
 The app will be available at *localhost:[PORT]* where `PORT` is whatever value is set in your `.env` file.
 
 For production build set `NODE_ENV=production` in `.env` and execute `npm run build`.
+
+#### Screenshots 
+![Screenshot](https://i.imgur.com/mvLmKl7.png)
