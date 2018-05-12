@@ -42,8 +42,33 @@ app.get('/', (req, res) => {
 
 app.get('/events', (req, res) => res.send(events));
 
+let EVENT_ID_COUNT = 1; // I know, not very secure...
+
 app.post('/events', (req, res) => {
-    events.push(req.body);
+    const event = req.body;
+    if (events.find(ev => ev.id === event.id)) {
+        return res.sendStatus(409); // Conflict, already exists
+    }
+    event.id = EVENT_ID_COUNT++;
+    events.push(event);
+    res.send(event);
+});
+
+app.put('/events/:id', (req, res) => {
+    const index = events.findIndex(ev => ev.id === parseInt(req.params.id));
+    if (index === -1) {
+        return res.sendStatus(404);
+    }
+    events[index] = req.body;
+    res.sendStatus(200);
+});
+
+app.delete('/events/:id', (req, res) => {
+    const index = events.findIndex(ev => ev.id === parseInt(req.params.id));
+    if (index === -1) {
+        return res.sendStatus(404);
+    }
+    events.splice(index, 1);
     res.sendStatus(200);
 });
 

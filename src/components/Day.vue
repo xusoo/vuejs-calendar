@@ -2,12 +2,14 @@
 	<div :class="{ day: true, today: isToday, past: isPast, 'not-current-month': isNotCurrentMonth, active: isActive}" @click="openEventForm">
 		{{ day.date() }}
 		<ul class="event-list">
-			<li v-for="event in events">{{ event.description }}</li>
+			<event v-for="event in events" :event="event"/>
 		</ul>
 	</div>
 </template>
 
 <script>
+    import Event from "./Event.vue";
+
     export default {
         props: ['day'],
         computed: {
@@ -28,13 +30,14 @@
             }
         },
         methods: {
-            openEventForm(event) {
+            openEventForm(mouseEvent) {
                 this.$store.commit('openEventForm', {
-                    day: this.day,
-                    left: event.clientX,
-                    top: event.clientY
+                    event: { date: this.day },
+                    left: mouseEvent.clientX,
+                    top: mouseEvent.clientY
                 });
             }
-        }
+        },
+        components: { Event }
     }
 </script>

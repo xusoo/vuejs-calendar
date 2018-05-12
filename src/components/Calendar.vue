@@ -25,7 +25,7 @@
             },
             weeks() {
                 const firstOfMonth = this.$moment([this.year, this.month, 1]);
-                let numberOfWeeks = Math.ceil((firstOfMonth.isoWeekday() + this.daysInMonth - 1) / NUMBER_OF_DAYS_PER_WEEK);
+                const numberOfWeeks = Math.ceil((firstOfMonth.isoWeekday() + this.daysInMonth - 1) / NUMBER_OF_DAYS_PER_WEEK);
                 return [...Array(numberOfWeeks).keys()].map(week => [...this.daysInWeek(week)]);
             }
         },

@@ -109,9 +109,10 @@ body {
         @include calendar-row;
         .day {
           overflow: hidden;
+          overflow-y: visible;
           font-weight: bold;
           @include calendar-cell;
-          height: 100px;
+          min-height: 100px;
           user-select: none;
           cursor: default;
           border-left: $calendar-border;
@@ -148,14 +149,20 @@ body {
 
             li {
               white-space: nowrap;
+              cursor: pointer;
+              padding: 1px 5px;
+              text-overflow: ellipsis;
+              overflow: hidden;
+            }
+
+            li:hover {
+              background: $vista-blue;
+              color: white;
+              border-radius: 10px;
             }
           }
         }
 
-
-        .day {
-
-        }
         &:last-child {
           .day {
             border-bottom: $calendar-border;
@@ -212,18 +219,28 @@ body {
         text-align: right;
         button {
           $button-col: $pickled-bluewood;
-          padding: 0.5rem;
+          padding: 0.3rem 0.5rem;
           background-color: $button-col;
           border: 1px solid darken($button-col, 5%);
           font-weight: bold;
           border-radius: 2px;
           color: white;
+          cursor: pointer;
           &:focus {
             outline: none;
           }
           &:hover {
             background-color: lighten($button-col, 4%);
             border: 1px solid $button-col;
+          }
+          &.btn-danger {
+            $button-col: crimson;
+            background-color: $button-col;
+            border: 1px solid darken($button-col, 5%);
+            &:hover {
+              background-color: lighten($button-col, 4%);
+              border: 1px solid $button-col;
+            }
           }
         }
       }
