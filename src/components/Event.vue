@@ -1,5 +1,5 @@
 <template>
-	<li @click="edit">
+	<li @click.stop="edit" :class="event.color">
 		{{ event.description }}
 	</li>
 </template>
@@ -9,7 +9,6 @@
         props: ['event'],
         methods: {
             edit(mouseEvent) {
-                mouseEvent.stopPropagation();
                 this.$store.commit('openEventForm', {
                     left: mouseEvent.clientX,
                     top: mouseEvent.clientY,

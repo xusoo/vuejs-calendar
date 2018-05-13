@@ -42,7 +42,7 @@ export default function Store(events) {
             },
             editEvent(state, event) {
                 const index = state.events.findIndex(ev => ev.id === event.id);
-                if (index !== -1) state.events[index] = event;
+                if (index !== -1) state.events.splice(index, 1, event);
             },
             deleteEvent(state, eventId) {
                 const index = state.events.findIndex(ev => ev.id === eventId);

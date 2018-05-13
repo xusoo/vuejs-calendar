@@ -2,7 +2,7 @@
 	<div :class="{ day: true, today: isToday, past: isPast, 'not-current-month': isNotCurrentMonth, active: isActive}" @click="openEventForm">
 		{{ day.date() }}
 		<ul class="event-list">
-			<event v-for="event in events" :event="event"/>
+			<event v-for="event in events" :key="event.id" :event="event"/>
 		</ul>
 	</div>
 </template>
@@ -26,13 +26,13 @@
                 return this.day.month() !== this.$store.state.month;
             },
             isActive() {
-                return this.$store.state.eventForm.active && this.day.isSame(this.$store.state.eventForm.day, 'day');
+                return this.$store.state.eventForm.active && this.day.isSame(this.$store.state.eventForm.event.date, 'day');
             }
         },
         methods: {
             openEventForm(mouseEvent) {
                 this.$store.commit('openEventForm', {
-                    event: { date: this.day },
+                    event: { description: '', date: this.day, color: 'green' },
                     left: mouseEvent.clientX,
                     top: mouseEvent.clientY
                 });
