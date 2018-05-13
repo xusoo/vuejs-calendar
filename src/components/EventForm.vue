@@ -2,17 +2,17 @@
 	<div>
 		<div id="event-form-mask" @click="close" v-show="active"></div>
 		<div id="event-form" :class="{ active }" :style="{ left, top }">
-			<h4>{{ isNew() ? 'Add event' : 'Edit event' }}</h4>
+			<h4 :class="selectedColor">{{ isNew() ? 'Add event' : 'Edit event' }}</h4>
 			<p v-if="event.date">{{ event.date.format('dddd, MMM Do') }}</p>
 			<div class="text">
-				<input v-focus placeholder="e.g. Important meeting" type="text" v-model="description" @keypress.enter="saveEvent">
+				<input v-focus placeholder="e.g. Important meeting" type="text" :class="selectedColor" v-model="description" @keypress.enter="saveEvent">
 			</div>
 			<div class="event-colors">
 				<div :class="[color, color === selectedColor ? 'selected' : '' ]" v-for="color in colors" @click="selectColor(color)"></div>
 			</div>
 			<div class="buttons">
-				<button @click="deleteEvent" class="btn-danger" v-if="!isNew()">Delete</button>
-				<button @click="saveEvent">{{ isNew() ? 'Create' : 'Save' }}</button>
+				<button @click="deleteEvent" class="delete-btn" v-if="!isNew()">Delete</button>
+				<button @click="saveEvent" :class="selectedColor">{{ isNew() ? 'Create' : 'Save' }}</button>
 			</div>
 			<div id="close-button" @click="close">&times;</div>
 		</div>
@@ -117,6 +117,8 @@
 			color: $dusty-gray;
 			font-weight: normal;
 			font-size: 1.15rem;
+
+			@include colorize($property: 'color');
 		}
 
 		p {
@@ -132,35 +134,26 @@
 				width: calc(100% - 0.75rem);
 				padding: 0.25rem;
 				font-size: 0.75rem;
+				border: 1px solid lightgray;
+
+				@include colorize($property: 'border-color');
+
+				&:focus {
+					outline: none;
+				}
 			}
 			margin-bottom: 0.75rem;
 		}
 		.buttons {
 			text-align: right;
+
 			button {
-				$button-col: $pickled-bluewood;
-				padding: 0.3rem 0.5rem;
-				background-color: $button-col;
-				border: 1px solid darken($button-col, 5%);
-				font-weight: bold;
-				border-radius: 2px;
-				color: white;
-				cursor: pointer;
-				&:focus {
-					outline: none;
-				}
-				&:hover {
-					background-color: lighten($button-col, 4%);
-					border: 1px solid $button-col;
-				}
-				&.btn-danger {
-					$button-col: crimson;
-					background-color: $button-col;
-					border: 1px solid darken($button-col, 5%);
-					&:hover {
-						background-color: lighten($button-col, 4%);
-						border: 1px solid $button-col;
-					}
+				@include button;
+
+				&.delete-btn {
+					color: crimson;
+					background: white;
+					border: 1px solid transparent;
 				}
 			}
 		}
@@ -179,12 +172,7 @@
 				margin: 0 1px;
 			}
 
-			&.green { background: $green; }
-			&.blue { background: $blue; }
-			&.purple { background: $purple; }
-			&.pink { background: $pink; }
-			&.orange { background: $orange; }
-			&.yellow { background: $yellow; }
+			@include colorize($property: 'background');
 		}
 
 		#close-button {

@@ -25,3 +25,42 @@ $calendar-border: 1px solid $alto;
   width: 100%;
   padding: 0.5rem;
 }
+
+@mixin color-button($color) {
+  background-color: $color;
+  border: 1px solid darken($color, 5%);
+
+  &:hover {
+    background-color: lighten($color, 4%);
+    border: 1px solid $color;
+  }
+}
+
+@mixin button {
+  padding: 0.3rem 0.5rem;
+  font-weight: bold;
+  border-radius: 2px;
+  color: white;
+  cursor: pointer;
+
+  &.green  { @include color-button($green);  }
+  &.blue   { @include color-button($blue);   }
+  &.purple { @include color-button($purple); }
+  &.pink   { @include color-button($pink);   }
+  &.orange { @include color-button($orange); }
+  &.yellow { @include color-button($yellow); }
+
+  &:focus {
+    outline: none;
+  }
+}
+
+
+@mixin colorize($property, $status: '') {
+  &.green#{$status}  { #{$property}: $green;  }
+  &.blue#{$status}   { #{$property}: $blue;   }
+  &.purple#{$status} { #{$property}: $purple; }
+  &.pink#{$status}   { #{$property}: $pink;   }
+  &.orange#{$status} { #{$property}: $orange; }
+  &.yellow#{$status} { #{$property}: $yellow; }
+}
