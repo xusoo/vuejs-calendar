@@ -5,11 +5,23 @@
 </template>
 
 <script>
-    export default {
-        data() {
-            return {
-                weekdays: this.$moment.weekdaysShort(true)
-            }
-        },
-    }
+	export default {
+		data() {
+			return {
+				weekdays: this.$moment.weekdaysShort(true)
+			}
+		},
+	}
 </script>
+
+<style scoped lang="scss">
+	@import '../style/variables';
+
+	#day-bar {
+		@include calendar-row;
+
+		div {
+			@include calendar-cell;
+		}
+	}
+</style>

@@ -1,0 +1,27 @@
+$dusty-gray: #999;
+$gallery: #EEEEEE;
+$alto: #DDD;
+$bittersweet: #FF6F69;
+$buttermilk: rgba(255, 238, 173, 0.4);
+$light-pink: rgba(255, 206, 213, 0.3);
+$pickled-bluewood: #35495E;
+
+$green: #42B983;
+$blue: #48B3FF;
+$purple: #7708CA;
+$pink: #FF057F;
+$orange: #FF8B12;
+$yellow: #FFCC37;
+
+$calendar-border: 1px solid $alto;
+
+@mixin calendar-row {
+  display: flex;
+  justify-content: flex-start;
+  width: 100%;
+}
+
+@mixin calendar-cell {
+  width: 100%;
+  padding: 0.5rem;
+}

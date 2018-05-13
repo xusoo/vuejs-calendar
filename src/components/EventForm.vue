@@ -20,73 +20,197 @@
 </template>
 
 <script>
-    import { mapState } from 'vuex';
+	import { mapState } from 'vuex';
 
-    export default {
-        data() {
-            return {
-                colors: [ 'green', 'blue', 'purple', 'pink', 'orange', 'yellow'],
-                selectedColor: '',
-                description: ''
-            }
-        },
-        computed: mapState({
-            active: state => state.eventForm.active,
-            left: state => state.eventForm.left + 'px',
-            top: state => state.eventForm.top + 'px',
-            event: state => state.eventForm.event
-        }),
-        methods: {
-            isNew() {
-                return typeof this.event.id === 'undefined';
-            },
-            onOpen() {
-                this.description = this.event.description;
-                this.selectedColor = this.event.color;
-            },
-            saveEvent() {
-                if (!this.description.trim()) return;
+	export default {
+		data() {
+			return {
+				colors: ['green', 'blue', 'purple', 'pink', 'orange', 'yellow'],
+				selectedColor: '',
+				description: ''
+			}
+		},
+		computed: mapState({
+			active: state => state.eventForm.active,
+			left: state => state.eventForm.left + 'px',
+			top: state => state.eventForm.top + 'px',
+			event: state => state.eventForm.event
+		}),
+		methods: {
+			isNew() {
+				return typeof this.event.id === 'undefined';
+			},
+			onOpen() {
+				this.description = this.event.description;
+				this.selectedColor = this.event.color;
+			},
+			saveEvent() {
+				if (!this.description.trim()) return;
 
-                this.event.description = this.description.trim();
-                this.event.color = this.selectedColor;
+				this.event.description = this.description.trim();
+				this.event.color = this.selectedColor;
 
-                this.$store.dispatch(this.isNew() ? 'addEvent' : 'editEvent', this.event)
-                    .then(this.close)
-                    .catch((err) => {
-                        console.error(err);
-                        alert('An error occurred when trying to save the event!');
-                    });
-            },
-            deleteEvent() {
-                this.$store.dispatch('deleteEvent', this.event.id).then(this.close).catch((err) => {
-                    console.error(err);
-                    alert('An error occurred when trying to delete the event!');
-                });
-            },
-            close() {
-                this.$store.commit('closeEventForm');
-                this.description = '';
-                this.selectedColor = '';
-            },
-            selectColor(color) {
-                this.selectedColor = color;
-            }
-        },
-        directives: {
-            focus: {
-                update(el) {
-                    el.focus();
-                }
-            }
-        },
-        mounted() {
-            this.$store.subscribe(mutation => {
-                if (mutation.type === 'openEventForm') this.onOpen();
-            });
+				this.$store.dispatch(this.isNew() ? 'addEvent' : 'editEvent', this.event)
+					.then(this.close)
+					.catch((err) => {
+						console.error(err);
+						alert('An error occurred when trying to save the event!');
+					});
+			},
+			deleteEvent() {
+				this.$store.dispatch('deleteEvent', this.event.id).then(this.close).catch((err) => {
+					console.error(err);
+					alert('An error occurred when trying to delete the event!');
+				});
+			},
+			close() {
+				this.$store.commit('closeEventForm');
+				this.description = '';
+				this.selectedColor = '';
+			},
+			selectColor(color) {
+				this.selectedColor = color;
+			}
+		},
+		directives: {
+			focus: {
+				update(el) {
+					el.focus();
+				}
+			}
+		},
+		mounted() {
+			this.$store.subscribe(mutation => {
+				if (mutation.type === 'openEventForm') this.onOpen();
+			});
 
-            document.addEventListener('keydown', ev => {
-                if (this.active && ev.key === 'Escape') this.close();
-            });
-        }
-    }
+			document.addEventListener('keydown', ev => {
+				if (this.active && ev.key === 'Escape') this.close();
+			});
+		}
+	}
 </script>
+<style scoped lang="scss">
+	@import "../style/variables";
+
+	#event-form {
+
+		display: none;
+		box-shadow: 0 2px 4px $alto;
+		position: fixed;
+		width: 300px;
+		transform: translate(-50%, -100%);
+		z-index: 10;
+		padding: 1rem;
+		background-color: white;
+		border: 1px $alto solid;
+
+		&.active {
+			display: flex;
+		}
+
+		flex-direction: column;
+		align-content: space-between;
+
+		h4 {
+			margin: 0 0 0.75rem 0;
+			color: $dusty-gray;
+			font-weight: normal;
+			font-size: 1.15rem;
+		}
+
+		p {
+			font-size: 0.85rem;
+			margin: 0 0 0.85rem 0;
+		}
+
+		& > * {
+			width: 100%
+		}
+		.text {
+			input[type='text'] {
+				width: calc(100% - 0.75rem);
+				padding: 0.25rem;
+				font-size: 0.75rem;
+			}
+			margin-bottom: 0.75rem;
+		}
+		.buttons {
+			text-align: right;
+			button {
+				$button-col: $pickled-bluewood;
+				padding: 0.3rem 0.5rem;
+				background-color: $button-col;
+				border: 1px solid darken($button-col, 5%);
+				font-weight: bold;
+				border-radius: 2px;
+				color: white;
+				cursor: pointer;
+				&:focus {
+					outline: none;
+				}
+				&:hover {
+					background-color: lighten($button-col, 4%);
+					border: 1px solid $button-col;
+				}
+				&.btn-danger {
+					$button-col: crimson;
+					background-color: $button-col;
+					border: 1px solid darken($button-col, 5%);
+					&:hover {
+						background-color: lighten($button-col, 4%);
+						border: 1px solid $button-col;
+					}
+				}
+			}
+		}
+
+		.event-colors > div {
+			width: 14px;
+			height: 14px;
+			border-radius: 10px;
+			display: inline-block;
+			cursor: pointer;
+			margin: 2px 3px;
+
+			&:hover, &.selected {
+				width: 18px;
+				height: 18px;
+				margin: 0 1px;
+			}
+
+			&.green { background: $green; }
+			&.blue { background: $blue; }
+			&.purple { background: $purple; }
+			&.pink { background: $pink; }
+			&.orange { background: $orange; }
+			&.yellow { background: $yellow; }
+		}
+
+		#close-button {
+			margin: 0;
+			padding: 0;
+			font-size: 1.25rem;
+			background-color: white;
+			position: absolute;
+			border: none;
+			width: 20px;
+			font-weight: bold;
+			color: #666;
+			right: 0.6rem;
+			top: 0.6rem;
+			cursor: pointer;
+			&:focus {
+				outline: none;
+			}
+		}
+	}
+
+	#event-form-mask {
+		position: fixed;
+		width: 100%;
+		height: 100%;
+		left: 0;
+		top: 0;
+	}
+</style>

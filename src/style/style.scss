@@ -1,0 +1,31 @@
+@import './variables';
+
+@font-face {
+  font-family: 'Muli';
+  src: url('../assets/Muli-Light.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Muli';
+  src: url('../assets/Muli-Regular.ttf') format('truetype');
+  font-weight: bold;
+  font-style: normal;
+}
+
+body {
+  font-family: 'Muli', Helvetica, Arial, sans-serif;
+  color: $pickled-bluewood;
+  padding-bottom: 2rem;
+
+  display: flex;
+  justify-content: center;
+
+  background-color: $gallery;
+
+  #app {
+    display: block !important;
+    flex-basis: 1000px;
+  }
+}
