@@ -40,7 +40,7 @@ export default function Store(events) {
             addEvent(state, event) {
                 state.events.push(event);
             },
-            editEvent(state, event) {
+            updateEvent(state, event) {
                 const index = state.events.findIndex(ev => ev.id === event.id);
                 if (index !== -1) state.events.splice(index, 1, event);
             },
@@ -59,10 +59,10 @@ export default function Store(events) {
                     }).catch(reject);
                 });
             },
-            editEvent(context, event) {
+            updateEvent(context, event) {
                 return new Promise((resolve, reject) => {
-                    Axios.put(`/events/${event.id}`, event).then(() => {
-                        context.commit('editEvent', event);
+                    Axios.put(`/events`, event).then(() => {
+                        context.commit('updateEvent', event);
                         resolve();
                     }).catch(reject);
                 });

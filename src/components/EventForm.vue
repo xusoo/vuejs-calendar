@@ -3,7 +3,7 @@
 		<div id="event-form-mask" @click="close" v-show="active"></div>
 		<div id="event-form" :class="{ active }" :style="{ left, top }">
 			<h4 :class="selectedColor">{{ isNew() ? 'Add event' : 'Edit event' }}</h4>
-			<p v-if="event.date">{{ event.date.format('dddd, MMM Do') }}</p>
+			<p v-if="event.date">{{ event.date.format('dddd, MMM Do YYYY') }}</p>
 			<div class="text">
 				<input v-focus placeholder="e.g. Important meeting" type="text" :class="selectedColor" v-model="description" @keypress.enter="saveEvent">
 			</div>
@@ -50,7 +50,7 @@
 				this.event.description = this.description.trim();
 				this.event.color = this.selectedColor;
 
-				this.$store.dispatch(this.isNew() ? 'addEvent' : 'editEvent', this.event)
+				this.$store.dispatch(this.isNew() ? 'addEvent' : 'updateEvent', this.event)
 					.then(this.close)
 					.catch((err) => {
 						console.error(err);
