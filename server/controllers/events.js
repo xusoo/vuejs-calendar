@@ -3,34 +3,43 @@ const app = express();
 
 const Event = require('../model/event');
 
-app.get('/events', (req, res) => res.send(Event.all()));
-
-app.post('/events', (req, res) => {
+app.get('/events', async (req, res, next) => {
 	try {
-		res.send(Event.add(req.body));
+		res.send(await Event.all());
 	} catch (e) {
-		console.error(e);
-		res.sendStatus(409); // Conflict, already exists
+		next(e);
 	}
 });
 
-app.put('/events', (req, res) => {
+app.post('/events', async (req, res, next) => {
 	try {
-		Event.update(req.body);
-		res.sendStatus(200);
+		res.send(await Event.add(req.body));
 	} catch (e) {
-		console.error(e);
-		res.sendStatus(404);
+		next(e);
 	}
 });
 
-app.delete('/events/:id', (req, res) => {
+app.put('/events', async (req, res, next) => {
 	try {
-		Event.delete(parseInt(req.params.id));
+		const event = await Event.update(req.body);
+		if (!event) {
+			return res.sendStatus(404);
+		}
 		res.sendStatus(200);
 	} catch (e) {
-		console.error(e);
-		res.sendStatus(404);
+		next(e);
+	}
+});
+
+app.delete('/events/:id', async (req, res, next) => {
+	try {
+		const event = await Event.delete(req.params.id);
+		if (!event) {
+			return res.sendStatus(404);
+		}
+		res.sendStatus(200);
+	} catch (e) {
+		next(e);
 	}
 });
 

@@ -13,21 +13,23 @@ if (process.env.NODE_ENV === 'production') {
 	app.use('/dist', express.static(path.join(__dirname, '../../dist')));
 }
 
-app.get('/', (req, res) => {
-	const events = Event.all();
-
-	let template = fs.readFileSync(path.resolve('./index.html'), 'utf-8');
+const sendRenderedTemplateWithEvents = (req, res, events) => {
+	const template = fs.readFileSync(path.resolve('./index.html'), 'utf-8');
 	req.renderer.renderToString({ events }, (err, html) => {
-		res.send(template.replace('<!-- APP -->', `
-            <script>
-                var __INITIAL_STATE__ = {
-                    events: ${serializer(events)}
-                };
-            </script>
-            
-            ${html}
-        `));
+		res.send(template.replace(
+			'<!-- APP -->',
+			`<script> var __INITIAL_STATE__ = { events: ${serializer(events)} }; </script> ${html}`
+		));
 	});
+};
+
+app.get('/', async (req, res, next) => {
+	try {
+		let events = await Event.all();
+		sendRenderedTemplateWithEvents(req, res, events);
+	} catch (e) {
+		next(e);
+	}
 });
 
 app.use(require('./events'));

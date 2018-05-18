@@ -41,11 +41,11 @@ export default function Store(events) {
                 state.events.push(event);
             },
             updateEvent(state, event) {
-                const index = state.events.findIndex(ev => ev.id === event.id);
+                const index = state.events.findIndex(ev => ev._id === event._id);
                 if (index !== -1) state.events.splice(index, 1, event);
             },
             deleteEvent(state, eventId) {
-                const index = state.events.findIndex(ev => ev.id === eventId);
+                const index = state.events.findIndex(ev => ev._id === eventId);
                 if (index !== -1) state.events.splice(index, 1);
             }
         },
@@ -53,7 +53,7 @@ export default function Store(events) {
             addEvent(context, event) {
                 return new Promise((resolve, reject) => {
                     Axios.post('/events', event).then(response => {
-                        event.id = response.data.id;
+                        event._id = response.data._id;
                         context.commit('addEvent', event);
                         resolve();
                     }).catch(reject);

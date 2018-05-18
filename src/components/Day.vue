@@ -2,7 +2,7 @@
 	<div :class="{ day: true, today: isToday, past: isPast, 'not-current-month': isNotCurrentMonth, active: isActive}" @click="openEventForm">
 		{{ day.date() }}
 		<ul class="event-list">
-			<event v-for="event in events" :key="event.id" :event="event"/>
+			<event v-for="event in events" :key="event._id" :event="event"/>
 		</ul>
 	</div>
 </template>

@@ -38,7 +38,7 @@
 		}),
 		methods: {
 			isNew() {
-				return typeof this.event.id === 'undefined';
+				return typeof this.event._id === 'undefined';
 			},
 			onOpen() {
 				this.description = this.event.description;
@@ -58,7 +58,7 @@
 					});
 			},
 			deleteEvent() {
-				this.$store.dispatch('deleteEvent', this.event.id).then(this.close).catch((err) => {
+				this.$store.dispatch('deleteEvent', this.event._id).then(this.close).catch((err) => {
 					console.error(err);
 					alert('An error occurred when trying to delete the event!');
 				});

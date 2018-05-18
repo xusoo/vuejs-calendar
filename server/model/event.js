@@ -1,37 +1,42 @@
-const events = [];
+const mongo = require('mongodb').MongoClient;
+const ObjectId = require("mongodb").ObjectId;
 
-let EVENT_ID_COUNT = 1; // I know, not very secure, but it's just temporary.
-function generateId() {
-	return EVENT_ID_COUNT++;
-}
+const events = async (callback) => {
+	let client = await mongo.connect(process.env.MONGODB_URL);
+	try {
+		const db = client.db(process.env.MONGODB_DATABASE);
+		return await callback(db.collection('events'));
+	} finally {
+		client.close();
+	}
+};
 
 module.exports = {
-	all: () => events,
-	find: (id) => events.find(ev => ev.id === id),
-	findIndex: (id) => events.findIndex(ev => ev.id === id),
-
-	add(event) {
-		if (this.find(event.id)) {
-			throw new Error(`Event with ID ${event.id} already exists`);
-		}
-		event.id = generateId();
-		events.push(event);
-		return event;
+	async all() {
+		return await events((collection => {
+			return collection.find({}).toArray();
+		}));
 	},
 
-	update(event) {
-		const index = this.findIndex(event.id);
-		if (index === -1) {
-			throw new Error(`Event with ID ${event.id} does not exist`);
-		}
-		events[index] = event;
+	async add(event) {
+		return await events((async collection => {
+			const result = await collection.insertOne(event);
+			event._id = result.insertedId.toString();
+			return event;
+		}));
 	},
 
-	delete(id) {
-		const index = this.findIndex(id);
-		if (index === -1) {
-			throw new Error(`Event with ID ${id} does not exist`);
-		}
-		events.splice(index, 1);
+	async update(event) {
+		return await events((collection => {
+			const id = ObjectId(event._id);
+			delete event._id;
+			return collection.findOneAndReplace({ _id: id }, event);
+		}));
+	},
+
+	async delete(id) {
+		return await events((collection => {
+			return collection.findOneAndDelete({ _id: ObjectId(id) });
+		}));
 	}
 };
