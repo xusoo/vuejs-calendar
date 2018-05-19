@@ -1,7 +1,8 @@
 <template>
 	<div>
-		<div id="event-form-mask" @click="close" v-show="active"></div>
-		<div id="event-form" :class="{ active }" :style="{ left, top }">
+		<vodal :show="active" animation="slideUp" @hide="close" :closeOnEsc="true"
+		       :height="modalHeight" :width="modalWidth" className="event-form"
+		       :customStyles="modalStyles" customMaskStyles="background: none" >
 			<h4 :class="selectedColor">{{ isNew() ? 'Add event' : 'Edit event' }}</h4>
 			<p v-if="event.date">{{ event.date.format('dddd, MMM Do YYYY') }}</p>
 			<div class="text">
@@ -14,8 +15,7 @@
 				<button @click="deleteEvent" class="delete-btn" v-if="!isNew()">Delete</button>
 				<button @click="saveEvent" :class="selectedColor">{{ isNew() ? 'Create' : 'Save' }}</button>
 			</div>
-			<div id="close-button" @click="close">&times;</div>
-		</div>
+		</vodal>
 	</div>
 </template>
 
@@ -26,16 +26,29 @@
 		data() {
 			return {
 				colors: ['green', 'blue', 'purple', 'pink', 'orange', 'yellow'],
+				modalWidth: 300,
+				modalHeight: 150,
+				modalPadding: 15,
 				selectedColor: '',
 				description: ''
 			}
 		},
-		computed: mapState({
-			active: state => state.eventForm.active,
-			left: state => state.eventForm.left + 'px',
-			top: state => state.eventForm.top + 'px',
-			event: state => state.eventForm.event
-		}),
+		computed: Object.assign({
+				modalStyles() {
+					return {
+						left: (this.left - (this.modalWidth / 2) - (this.modalPadding / 2)) + 'px',
+						top: (this.top - this.modalHeight / 2 - (this.modalPadding / 2)) + 'px',
+						padding: this.modalPadding + 'px',
+						margin: 0
+					};
+				}
+			},
+			mapState({
+				active: state => state.eventForm.active,
+				left: state => state.eventForm.left,
+				top: state => state.eventForm.top,
+				event: state => state.eventForm.event
+			})),
 		methods: {
 			isNew() {
 				return typeof this.event._id === 'undefined';
@@ -66,7 +79,6 @@
 			close() {
 				this.$store.commit('closeEventForm');
 				this.description = '';
-				this.selectedColor = '';
 			},
 			selectColor(color) {
 				this.selectedColor = color;
@@ -75,7 +87,7 @@
 		directives: {
 			focus: {
 				update(el) {
-					el.focus();
+					setTimeout(() => el.focus(), 10);
 				}
 			}
 		},
@@ -83,34 +95,14 @@
 			this.$store.subscribe(mutation => {
 				if (mutation.type === 'openEventForm') this.onOpen();
 			});
-
-			document.addEventListener('keydown', ev => {
-				if (this.active && ev.key === 'Escape') this.close();
-			});
 		}
 	}
 </script>
+
 <style scoped lang="scss">
 	@import "../style/variables";
 
-	#event-form {
-
-		display: none;
-		box-shadow: 0 2px 4px $alto;
-		position: fixed;
-		width: 300px;
-		transform: translate(-50%, -100%);
-		z-index: 10;
-		padding: 1rem;
-		background-color: white;
-		border: 1px $alto solid;
-
-		&.active {
-			display: flex;
-		}
-
-		flex-direction: column;
-		align-content: space-between;
+	.event-form {
 
 		h4 {
 			margin: 0 0 0.75rem 0;
@@ -129,6 +121,7 @@
 		& > * {
 			width: 100%
 		}
+
 		.text {
 			input[type='text'] {
 				width: calc(100% - 0.75rem);
@@ -144,6 +137,7 @@
 			}
 			margin-bottom: 0.75rem;
 		}
+
 		.buttons {
 			text-align: right;
 
@@ -174,31 +168,6 @@
 
 			@include colorize($property: 'background');
 		}
-
-		#close-button {
-			margin: 0;
-			padding: 0;
-			font-size: 1.25rem;
-			background-color: white;
-			position: absolute;
-			border: none;
-			width: 20px;
-			font-weight: bold;
-			color: #666;
-			right: 0.6rem;
-			top: 0.6rem;
-			cursor: pointer;
-			&:focus {
-				outline: none;
-			}
-		}
 	}
 
-	#event-form-mask {
-		position: fixed;
-		width: 100%;
-		height: 100%;
-		left: 0;
-		top: 0;
-	}
 </style>

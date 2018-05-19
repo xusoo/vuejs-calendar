@@ -30,11 +30,11 @@
 			}
 		},
 		methods: {
-			openEventForm(mouseEvent) {
+			openEventForm() {
 				this.$store.commit('openEventForm', {
 					event: { description: '', date: this.day, color: 'green' },
-					left: mouseEvent.clientX,
-					top: mouseEvent.clientY
+					left: this.$el.offsetLeft + this.$el.clientWidth / 2,
+					top: this.$el.offsetTop + this.$el.clientHeight / 2 - document.documentElement.scrollTop
 				});
 			}
 		},
@@ -83,6 +83,11 @@
 			list-style: none;
 			padding: 0;
 			margin: 0.5rem 0 0.5rem 0;
+		}
+
+		&:hover {
+			cursor: pointer;
+			background-color: #F7F7F7;
 		}
 	}
 </style>

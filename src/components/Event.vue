@@ -8,10 +8,10 @@
 	export default {
 		props: ['event'],
 		methods: {
-			edit(mouseEvent) {
+			edit() {
 				this.$store.commit('openEventForm', {
-					left: mouseEvent.clientX,
-					top: mouseEvent.clientY,
+					left: this.$el.offsetLeft + this.$el.clientWidth / 2,
+					top: this.$el.offsetTop + this.$el.clientHeight / 2 - document.documentElement.scrollTop,
 					event: this.event
 				});
 			}
