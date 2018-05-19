@@ -1,4 +1,5 @@
 import './style/style.scss';
-import VueCalendar from './entry';
+import { createApp } from './entry';
 
-VueCalendar(window.__INITIAL_STATE__).$mount('#app');
+const { app } = createApp(window.__INITIAL_STATE__);
+app.$mount('#app');

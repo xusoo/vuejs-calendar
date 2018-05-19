@@ -2,8 +2,9 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 import Axios from 'axios';
 
+Vue.use(Vuex);
 
-export default function Store(events) {
+export default function createStore({ events }) {
     const moment = Vue.prototype.$moment;
 
     return new Vuex.Store({
@@ -27,6 +28,10 @@ export default function Store(events) {
             }
         },
         mutations: {
+            goToToday(state) {
+                state.month = moment().month();
+                state.year = moment().year();
+            },
             changeDate(state, { month, year }) {
                 state.month = month;
                 state.year = year;

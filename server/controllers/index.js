@@ -15,7 +15,7 @@ if (process.env.NODE_ENV === 'production') {
 
 const sendRenderedTemplateWithEvents = (req, res, events) => {
 	const template = fs.readFileSync(path.resolve('./index.html'), 'utf-8');
-	req.renderer.renderToString({ events }, (err, html) => {
+	req.renderer.renderToString({ events, url: req.url }, (err, html) => {
 		res.send(template.replace(
 			'<!-- APP -->',
 			`<script> var __INITIAL_STATE__ = { events: ${serializer(events)} }; </script> ${html}`

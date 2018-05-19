@@ -14,7 +14,11 @@
 		methods: {
 			changeMonth(delta) {
 				const updated = this.$moment([this.year, this.month]).add(delta, 'month');
-				this.$store.commit('changeDate', { month: updated.month(), year: updated.year() });
+				const query = {
+					month: updated.month() + 1,
+					year: updated.year()
+				};
+				this.$router.push({ query });
 			}
 		}
 	}

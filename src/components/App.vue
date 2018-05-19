@@ -1,10 +1,12 @@
 <template>
 	<div>
 		<div id="header">
-			<div>
-				<img src="../assets/logo.png">
-				<h1>Vue.js Calendar</h1>
-			</div>
+			<router-link to="/" style="text-decoration: none;">
+				<div>
+					<img src="../assets/logo.png">
+					<h1>Vue.js Calendar</h1>
+				</div>
+			</router-link>
 			<div>
 				<month-selector/>
 			</div>
